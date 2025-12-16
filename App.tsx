@@ -16,6 +16,7 @@ import { ReadingModal } from './components/ReadingModal';
 import { SettingsModal } from './components/SettingsModal';
 import { StatsCard } from './components/StatsCard';
 import { generateReport } from './services/pdfGenerator';
+import { sendTelegramNotification } from './services/notifications';
 import { generateId, formatDate, formatTime, getGlucoseStatus, getStatusColor, getStatusDotColor } from './utils/helpers';
 
 const App: React.FC = () => {
@@ -97,7 +98,7 @@ const App: React.FC = () => {
   }, [filteredReadings]);
 
   // Handlers
-  const handleAddReading = (date: string, time: string, value: number, type: ReadingType) => {
+  const handleAddReading = async (date: string, time: string, value: number, type: ReadingType) => {
     const dateTime = new Date(`${date}T${time}`);
     const newReading: Reading = {
       id: generateId(),
@@ -107,7 +108,11 @@ const App: React.FC = () => {
       type,
       timestamp: dateTime.getTime()
     };
+    
     setReadings(prev => [newReading, ...prev]);
+    
+    // Attempt to send notification (fire and forget)
+    await sendTelegramNotification(newReading);
   };
 
   const handleDelete = (id: string) => {
