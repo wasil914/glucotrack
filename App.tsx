@@ -8,7 +8,6 @@ import {
   TrendingDown, 
   TrendingUp, 
   Download,
-  Filter,
   Droplet
 } from 'lucide-react';
 import { Reading, FilterRange, Stats, ReadingType, DateRange } from './types';

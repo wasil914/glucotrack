@@ -1,15 +1,14 @@
 import { Reading } from '../types';
 import { getGlucoseStatus } from '../utils/helpers';
 
-// Hardcoded fallback token
+// Hardcoded token - strictly enforced
 const DEFAULT_BOT_TOKEN = "8212019317:AAEt4WUq8L3oGL4t6YEabx2YM5S7NniCAtU";
 
 export const sendTelegramNotification = async (reading: Reading) => {
   const storedChatId = localStorage.getItem('telegram_chat_id');
-  const storedBotToken = localStorage.getItem('telegram_bot_token');
-
-  // Use stored credentials, or fall back to default token
-  const botToken = storedBotToken || DEFAULT_BOT_TOKEN;
+  
+  // Strictly use the default token, do not read from localStorage to prevent misuse
+  const botToken = DEFAULT_BOT_TOKEN;
   const chatId = storedChatId;
 
   if (!chatId) return;
@@ -31,7 +30,6 @@ export const sendTelegramNotification = async (reading: Reading) => {
 *Time:* ${reading.date} ${reading.time}
 `;
 
-  // Fix: Use the variable botToken inside ${}
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
   try {
@@ -51,11 +49,11 @@ export const sendTelegramNotification = async (reading: Reading) => {
   }
 };
 
-export const sendTestMessage = async (chatId: string, token: string): Promise<boolean> => {
-  // Use the passed token, or fallback to default if empty
-  const botToken = token || DEFAULT_BOT_TOKEN;
+// Simplified signature since we don't need the token passed in anymore
+export const sendTestMessage = async (chatId: string): Promise<boolean> => {
+  const botToken = DEFAULT_BOT_TOKEN;
   
-  if (!chatId || !botToken) return false;
+  if (!chatId) return false;
 
   const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
   const message = `🔔 *GlucoTrack Connection Test*\n\nIf you are reading this, your notifications are set up correctly! ✅`;
