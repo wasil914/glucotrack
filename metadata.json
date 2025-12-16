@@ -1,0 +1,5 @@
+{
+  "name": "GlucoTrack - Mobile First Diabetes Manager",
+  "description": "A professional, mobile-first blood sugar tracking application with robust filtering, statistics, and PDF reporting capabilities.",
+  "requestFramePermissions": []
+}
